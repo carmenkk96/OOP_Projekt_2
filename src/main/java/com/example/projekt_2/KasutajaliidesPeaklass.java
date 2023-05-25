@@ -110,7 +110,7 @@ public class KasutajaliidesPeaklass extends Application implements EventHandler<
                         throw new ViganeSisendErind();
                     }
                 }
-                if (nimetükid.length < 2 || tootenimi == null) {
+                if (nimetükid.length < 2 || tootenimi == "") {
                     throw new ViganeSisendErind();
                 }
                 ID uusId = new ID(nimi, tootenimi);
