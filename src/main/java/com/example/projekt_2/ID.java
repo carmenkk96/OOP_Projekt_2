@@ -1,5 +1,3 @@
-//Testin uut branchi lihtsalt, lõpus kustutan selle commenti
-
 package com.example.projekt_2;
 
 import java.io.*;
@@ -54,7 +52,7 @@ public class ID extends Taotlus {
             if (!idSobivuseKontroll(this.id))
                 return veaTeade();
         }
-        super.taotluseKirjutamineFaili(this.id);
+        super.taotluseKirjutamineAndmebaasi(this.id);
         return this.id;
     }
 
