@@ -1,7 +1,9 @@
 package com.example.projekt_2;
 
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class Taotlus {
@@ -26,11 +28,40 @@ public class Taotlus {
     public LocalDate getTaotluseKuupäev() {
         return taotluseKuupäev;
     }
-    public void taotluseKirjutamineFaili(String id) throws Exception {
-        try(PrintWriter pw = new PrintWriter(new FileOutputStream("andmebaas.txt", true))) {
-            pw.println(this.taotluseKuupäev + " " +  this.taotlejaNimi + " " + this.getTooteNimi() + " " + id);
+
+    public void taotluseKirjutamineAndmebaasi(String id) throws Exception {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            // Establish a connection to the database
+            connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+
+            // Prepare the SQL statement
+            String insertQuery = "INSERT INTO taotlus (taotlejaNimi, tooteNimi, taotluseKuupaev, generatedID) VALUES (?, ?, ?, ?)";
+            preparedStatement = connection.prepareStatement(insertQuery);
+
+            // Set the parameter values
+            preparedStatement.setString(1, this.taotlejaNimi); // Set the taotlejaNimi value
+            preparedStatement.setString(2, this.tooteNimi); // Set the tooteNimi value
+            preparedStatement.setString(3, this.taotluseKuupäev.toString()); // Set the taotluseKuupaev value
+            preparedStatement.setString(4, id); // Set the id value
+
+
+            // Execute the SQL statement
+            preparedStatement.executeUpdate();
+
+            System.out.println("Andmed lisatud andmebaasi");
+        } finally {
+            // Close the prepared statement and connection
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
         }
     }
-
 }
+
 
